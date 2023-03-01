@@ -3,11 +3,13 @@ import { orders } from '../data/orders.json';
 
 interface IQueryString {
     name: string;
-    customerId: number;
+    id: number;
+    customerId: number
 }
 
 interface IParams {
     name: string;
+    id: number;
     customerId: number;
 }
 
@@ -28,8 +30,6 @@ export default async function (instance: FastifyInstance, opts: FastifyServerOpt
         })
     })
 
-
-
     instance.register(async (instance: FastifyInstance, opts: FastifyServerOptions, done) => {
 
         instance.get('/', async (req: FastifyRequest<CustomRouteGenericQuery>, res: FastifyReply) => {
@@ -49,15 +49,22 @@ export default async function (instance: FastifyInstance, opts: FastifyServerOpt
     instance.register(async (instance: FastifyInstance, opts: FastifyServerOptions, done) => {
 
         instance.get('/', async (req: FastifyRequest<CustomRouteGenericQuery>, res: FastifyReply) => {
-            res.status(200).send(orders)
+            res.status(200).send({orders})
         })
 
-        instance.get('/:customerId', async (req: FastifyRequest<CustomRouteGenericParam>, res: FastifyReply) => {
-            const { customerId = '' } = req.params
-            let obj = orders.find(o => o.customerId == customerId);
+        instance.get('/:id', async (req: FastifyRequest<CustomRouteGenericParam>, res: FastifyReply) => {
+            const { id = 0 } = req.params
+            const order = orders.find(o => o.id == id);
 
-            res.status(200).send(obj)
+            res.status(200).send({order})
         })
+
+        instance.get('/customer/:customerId', async (req: FastifyRequest<CustomRouteGenericParam>, res: FastifyReply) => {
+            const { customerId = 0 } = req.params
+            const customerOrders = orders.filter((x) => x.customerId == customerId)
+            res.status(200).send({customerOrders})
+        })
+
         done()
     }, {
         prefix: '/orders'

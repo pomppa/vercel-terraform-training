@@ -1,5 +1,5 @@
 import { FastifyInstance, FastifyReply, FastifyRequest, FastifyServerOptions } from 'fastify'
-import orders from '../data/orders.json';
+import * as orders from '../data/orders.json';
 
 interface IQueryString {
     name: string;

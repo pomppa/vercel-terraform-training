@@ -4,3 +4,4 @@ backend.tf
 .terraform/
 *.hcl
 *.tfstate
+.vercel

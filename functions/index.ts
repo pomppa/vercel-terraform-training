@@ -1,4 +1,5 @@
 import { FastifyInstance, FastifyReply, FastifyRequest, FastifyServerOptions } from 'fastify'
+import orders from '../data/orders.json';
 
 interface IQueryString {
     name: string;
@@ -6,6 +7,7 @@ interface IQueryString {
 
 interface IParams {
     name: string;
+    customerId: number;
 }
 
 interface CustomRouteGenericParam {
@@ -25,6 +27,8 @@ export default async function (instance: FastifyInstance, opts: FastifyServerOpt
         })
     })
 
+
+
     instance.register(async (instance: FastifyInstance, opts: FastifyServerOptions, done) => {
 
         instance.get('/', async (req: FastifyRequest<CustomRouteGenericQuery>, res: FastifyReply) => {
@@ -39,6 +43,23 @@ export default async function (instance: FastifyInstance, opts: FastifyServerOpt
         done()
     }, {
         prefix: '/hello'
+    })
+
+    instance.register(async (instance: FastifyInstance, opts: FastifyServerOptions, done) => {
+
+        instance.get('/', async (req: FastifyRequest<CustomRouteGenericQuery>, res: FastifyReply) => {
+            res.status(200).send(orders)
+        })
+
+        instance.get('/:customerId', async (req: FastifyRequest<CustomRouteGenericParam>, res: FastifyReply) => {
+            const { customerId = '' } = req.params
+            let obj = orders.orders.find(o => o.customerId == customerId);
+
+            res.status(200).send(obj)
+        })
+        done()
+    }, {
+        prefix: '/orders'
     })
 
     done()

@@ -3,6 +3,7 @@ import { orders } from '../data/orders.json';
 
 interface IQueryString {
     name: string;
+    customerId: number;
 }
 
 interface IParams {

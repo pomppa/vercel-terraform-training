@@ -1,5 +1,5 @@
 import { FastifyInstance, FastifyReply, FastifyRequest, FastifyServerOptions } from 'fastify'
-import * as orders from '../data/orders.json';
+import { orders } from '../data/orders.json';
 
 interface IQueryString {
     name: string;
@@ -53,7 +53,7 @@ export default async function (instance: FastifyInstance, opts: FastifyServerOpt
 
         instance.get('/:customerId', async (req: FastifyRequest<CustomRouteGenericParam>, res: FastifyReply) => {
             const { customerId = '' } = req.params
-            let obj = orders.orders.find(o => o.customerId == customerId);
+            let obj = orders.find(o => o.customerId == customerId);
 
             res.status(200).send(obj)
         })
